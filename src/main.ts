@@ -3,6 +3,9 @@
 // High-performance, lightweight interactions
 // ================================
 
+// Declare global for build-time injected environment variables
+declare const DISCORD_WEBHOOK_URL: string;
+
 interface NavigationLink {
     element: HTMLElement;
     section: string;
@@ -249,7 +252,7 @@ class PortfolioApp {
         try {
             // Send to Discord webhook with beautiful embed
             // Webhook URL is injected during build process from .env
-            const webhookUrl = process.env.DISCORD_WEBHOOK_URL || '';
+            const webhookUrl = DISCORD_WEBHOOK_URL || '';
             
             if (!webhookUrl) {
                 throw new Error('Webhook URL not configured');

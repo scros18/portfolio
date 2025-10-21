@@ -207,11 +207,21 @@ async function obfuscateJavaScript() {
       }
     });
     
-    // Replace process.env.VARIABLE with actual values
-    Object.keys(envVars).forEach(key => {
-      const regex = new RegExp(`process\\.env\\.${key}`, 'g');
-      processedCode = processedCode.replace(regex, `'${envVars[key]}'`);
-    });
+    // Replace DISCORD_WEBHOOK_URL constant with actual value
+    if (envVars.DISCORD_WEBHOOK_URL) {
+      const regex = /const DISCORD_WEBHOOK_URL\s*=\s*['"][^'"]*['"]/g;
+      processedCode = processedCode.replace(
+        regex, 
+        `const DISCORD_WEBHOOK_URL = '${envVars.DISCORD_WEBHOOK_URL}'`
+      );
+      
+      // Also handle if it's declared without initialization
+      const declareRegex = /declare const DISCORD_WEBHOOK_URL:\s*string;/g;
+      processedCode = processedCode.replace(
+        declareRegex,
+        `const DISCORD_WEBHOOK_URL = '${envVars.DISCORD_WEBHOOK_URL}';`
+      );
+    }
     
     log('Environment variables injected', 'success');
   } else {

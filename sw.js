@@ -1,8 +1,8 @@
 // Service Worker for Aggressive Caching - Sam Croston Portfolio
-// Version 1.0.0 - Production Grade
+// Version 1.1.0 - Performance Optimized
 
-const CACHE_NAME = 'sam-portfolio-v1.0.0';
-const RUNTIME_CACHE = 'sam-portfolio-runtime-v1.0.0';
+const CACHE_NAME = 'sam-portfolio-v1.1.0';
+const RUNTIME_CACHE = 'sam-portfolio-runtime-v1.1.0';
 
 // Assets to cache immediately on install
 const PRECACHE_ASSETS = [

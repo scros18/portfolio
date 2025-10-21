@@ -36,17 +36,26 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="site.webmanifest">
     
-    <!-- DNS Prefetch for fonts -->
+    <!-- DNS Prefetch & Preconnect for optimal loading -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://discord.com">
     
-    <!-- Preconnect for faster font loading -->
+    <!-- Preconnect for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://discord.com" crossorigin>
     
     <!-- Preload critical assets -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="dist/main.js" as="script" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Critical CSS inline for instant render -->
+    <style>
+        :root{--primary:#6366f1;--secondary:#8b5cf6;--accent:#ec4899;--dark:#0f172a;--darker:#020617;--light:#f1f5f9;--gray:#64748b}*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--darker);color:var(--light);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;will-change:transform}.glass-nav{position:fixed;top:0;width:100%;z-index:1000;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(15,23,42,0.8);border-bottom:1px solid rgba(255,255,255,0.1);contain:layout style paint}img{content-visibility:auto;loading:lazy;decoding:async}
+    </style>
     
     <link rel="stylesheet" href="styles.css">
     
@@ -59,11 +68,10 @@
     <meta name="msapplication-TileColor" content="#6366f1">
     <meta name="msapplication-config" content="browserconfig.xml">
     
-    <!-- Optimized font loading -->
+    <!-- Optimized font loading with font-display swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Background Animation -->
@@ -580,6 +588,6 @@
     }
     </script>
 
-    <script type="module" src="dist/main.js"></script>
+    <script type="module" src="dist/main.js" defer></script>
 </body>
 </html>

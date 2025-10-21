@@ -54,7 +54,7 @@
     
     <!-- Critical CSS inline for instant render -->
     <style>
-        :root{--primary:#6366f1;--secondary:#8b5cf6;--accent:#ec4899;--dark:#0f172a;--darker:#020617;--light:#f1f5f9;--gray:#64748b}*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--darker);color:var(--light);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;will-change:transform}.glass-nav{position:fixed;top:0;width:100%;z-index:1000;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(15,23,42,0.8);border-bottom:1px solid rgba(255,255,255,0.1);contain:layout style paint}img{content-visibility:auto;loading:lazy;decoding:async}
+        :root{--primary:#6366f1;--secondary:#8b5cf6;--accent:#ec4899;--dark:#0f172a;--darker:#020617;--light:#f1f5f9;--gray:#64748b}*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--darker);color:var(--light);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:local('Inter'),url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2) format('woff2')}.hero{min-height:100vh;display:flex;align-items:center;justify-content:center}.glass-nav{position:fixed;top:0;width:100%;z-index:1000;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(15,23,42,0.8);border-bottom:1px solid rgba(255,255,255,0.1);contain:layout style paint}.hero-title{font-size:3.5rem;font-weight:700;margin-bottom:1rem}.hero-subtitle{font-size:1.5rem;margin-bottom:1rem}.container{max-width:1200px;margin:0 auto;padding:0 2rem}
     </style>
     
     <link rel="stylesheet" href="styles.css">
@@ -71,7 +71,8 @@
     <!-- Optimized font loading with font-display swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
 </head>
 <body>
     <!-- Background Animation -->
@@ -512,12 +513,12 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>Sam Croston</h4>
+                    <h3>Sam Croston</h3>
                     <p>Professional Web Developer</p>
                     <p>United Kingdom</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Services</h4>
+                    <h3>Services</h3>
                     <ul>
                         <li>Web Application Development</li>
                         <li>Performance Optimization</li>
@@ -526,7 +527,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Technologies</h4>
+                    <h3>Technologies</h3>
                     <ul>
                         <li>TypeScript & JavaScript</li>
                         <li>React & Next.js</li>
@@ -535,7 +536,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Contact</h4>
+                    <h3>Contact</h3>
                     <ul>
                         <li><a href="mailto:quote@samcroston.com">quote@samcroston.com</a></li>
                         <li><a href="https://github.com/scros18" target="_blank" rel="noopener">GitHub (@scros18)</a></li>

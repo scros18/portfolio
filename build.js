@@ -188,44 +188,24 @@ async function obfuscateJavaScript() {
   const originalSize = Buffer.byteLength(originalCode);
   logFile('Reading', 'main.js', originalSize);
   
-  // Load environment variables
-  log('Injecting environment variables...', 'step');
+  // Load webhook URL from webhook.txt
+  log('Injecting webhook URL...', 'step');
   let processedCode = originalCode;
   
-  // Load .env file if it exists
-  const envPath = path.join(__dirname, '.env');
-  if (fs.existsSync(envPath)) {
-    const envContent = fs.readFileSync(envPath, 'utf8');
-    const envVars = {};
+  const webhookPath = path.join(__dirname, 'webhook.txt');
+  if (fs.existsSync(webhookPath)) {
+    const webhookUrl = fs.readFileSync(webhookPath, 'utf8').trim();
     
-    envContent.split('\n').forEach(line => {
-      const match = line.match(/^([^#=]+)=(.*)$/);
-      if (match) {
-        const key = match[1].trim();
-        const value = match[2].trim();
-        envVars[key] = value;
-      }
-    });
+    // Replace the placeholder webhook URL with actual value
+    const webhookRegex = /const webhookUrl = ['"]https:\/\/discord\.com\/api\/webhooks\/[^'"]*['"]/g;
+    processedCode = processedCode.replace(
+      webhookRegex, 
+      `const webhookUrl = '${webhookUrl}'`
+    );
     
-    // Replace DISCORD_WEBHOOK_URL constant with actual value
-    if (envVars.DISCORD_WEBHOOK_URL) {
-      const regex = /const DISCORD_WEBHOOK_URL\s*=\s*['"][^'"]*['"]/g;
-      processedCode = processedCode.replace(
-        regex, 
-        `const DISCORD_WEBHOOK_URL = '${envVars.DISCORD_WEBHOOK_URL}'`
-      );
-      
-      // Also handle if it's declared without initialization
-      const declareRegex = /declare const DISCORD_WEBHOOK_URL:\s*string;/g;
-      processedCode = processedCode.replace(
-        declareRegex,
-        `const DISCORD_WEBHOOK_URL = '${envVars.DISCORD_WEBHOOK_URL}';`
-      );
-    }
-    
-    log('Environment variables injected', 'success');
+    log('Webhook URL injected from webhook.txt', 'success');
   } else {
-    log('No .env file found - using defaults', 'warning');
+    log('No webhook.txt file found - webhook may not work!', 'warning');
   }
   
   log('Applying military-grade obfuscation...', 'step');

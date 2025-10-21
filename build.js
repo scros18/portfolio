@@ -98,32 +98,32 @@ const config = {
   obfuscatorOptions: {
     compact: true,
     controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.75,
+    controlFlowFlatteningThreshold: 0.5, // Reduced from 0.75 for smaller bundle
     deadCodeInjection: true,
-    deadCodeInjectionThreshold: 0.4,
-    debugProtection: false, // Set to true for extra protection (may impact performance)
+    deadCodeInjectionThreshold: 0.1, // Reduced from 0.4 for smaller bundle
+    debugProtection: false,
     debugProtectionInterval: 0,
     disableConsoleOutput: true, // Remove ALL console.log in production
     identifierNamesGenerator: 'hexadecimal',
     log: false,
-    numbersToExpressions: true,
+    numbersToExpressions: false, // Disabled for smaller bundle
     renameGlobals: false,
-    selfDefending: true,
+    selfDefending: false, // Disabled for production performance
     simplify: true,
     splitStrings: true,
     splitStringsChunkLength: 10,
     stringArray: true,
     stringArrayCallsTransform: true,
-    stringArrayEncoding: ['base64'],
+    stringArrayEncoding: [], // Disabled base64 encoding for smaller bundle
     stringArrayIndexShift: true,
     stringArrayRotate: true,
     stringArrayShuffle: true,
-    stringArrayWrappersCount: 2,
-    stringArrayWrappersChainedCalls: true,
-    stringArrayWrappersParametersMaxCount: 4,
+    stringArrayWrappersCount: 1, // Reduced from 2
+    stringArrayWrappersChainedCalls: false, // Disabled for smaller bundle
+    stringArrayWrappersParametersMaxCount: 2, // Reduced from 4
     stringArrayWrappersType: 'function',
-    stringArrayThreshold: 0.75,
-    transformObjectKeys: true,
+    stringArrayThreshold: 0.5, // Reduced from 0.75
+    transformObjectKeys: false, // Disabled for smaller bundle
     unicodeEscapeSequence: false
   },
   

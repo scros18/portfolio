@@ -32,34 +32,43 @@ class PortfolioApp {
     }
 
     private init(): void {
+        // Critical: Initialize navigation and mobile menu immediately
         this.setupNavigation();
-        this.setupScrollSpy();
         this.setupMobileMenu();
         this.setupContactForm();
         this.setupSmoothScroll();
-        this.optimizeAnimations();
-        this.registerServiceWorker();
+        
+        // Non-critical: Defer to idle time to avoid blocking main thread
+        this.deferNonCritical();
+    }
+    
+    private deferNonCritical(): void {
+        // Use requestIdleCallback if available, otherwise setTimeout
+        const idleCallback = (window as any).requestIdleCallback || ((cb: Function) => setTimeout(cb, 1));
+        
+        idleCallback(() => {
+            this.setupScrollSpy();
+            this.optimizeAnimations();
+        });
+        
+        // Defer service worker registration to after page load
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => this.registerServiceWorker(), { once: true });
+        }
     }
 
     // ================================
     // SERVICE WORKER REGISTRATION
     // ================================
     private registerServiceWorker(): void {
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((registration) => {
-                        // Service worker registered successfully
-                        // Check for updates periodically
-                        setInterval(() => {
-                            registration.update();
-                        }, 60000); // Check every minute
-                    })
-                    .catch(() => {
-                        // Silent fail - service worker is optional enhancement
-                    });
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                // Check for updates periodically (every 5 minutes)
+                setInterval(() => registration.update(), 300000);
+            })
+            .catch(() => {
+                // Silent fail - service worker is optional enhancement
             });
-        }
     }
 
     // ================================
@@ -373,111 +382,24 @@ class PortfolioApp {
     // ================================
     private optimizeAnimations(): void {
         // Reduce motion for users who prefer it
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        
-        if (prefersReducedMotion) {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             const style = document.createElement('style');
-            style.textContent = `
-                *, *::before, *::after {
-                    animation-duration: 0.01ms !important;
-                    animation-iteration-count: 1 !important;
-                    transition-duration: 0.01ms !important;
-                }
-            `;
+            style.textContent = '*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}';
             document.head.appendChild(style);
         }
-
-        // Lazy load images when they're near viewport
-        this.setupLazyLoading();
-
-        // Optimize animations with requestAnimationFrame
-        this.setupPerformanceMonitoring();
-    }
-
-    private setupLazyLoading(): void {
-        const images = document.querySelectorAll('img[data-src]');
-        
-        if ('IntersectionObserver' in window) {
-            const imageObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target as HTMLImageElement;
-                        const src = img.getAttribute('data-src');
-                        if (src) {
-                            img.src = src;
-                            img.removeAttribute('data-src');
-                            imageObserver.unobserve(img);
-                        }
-                    }
-                });
-            });
-
-            images.forEach((img) => imageObserver.observe(img));
-        }
-    }
-
-    private setupPerformanceMonitoring(): void {
-        // Log performance metrics
-        if ('performance' in window && 'PerformanceObserver' in window) {
-            try {
-                const observer = new PerformanceObserver((list) => {
-                    for (const entry of list.getEntries()) {
-                        console.log(`Performance: ${entry.name} - ${entry.duration}ms`);
-                    }
-                });
-                
-                observer.observe({ entryTypes: ['measure', 'navigation'] });
-            } catch (e) {
-                console.log('Performance monitoring not supported');
-            }
-        }
-
-        // Track page load time
-        window.addEventListener('load', () => {
-            const perfData = window.performance.timing;
-            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-            console.log(`Page Load Time: ${pageLoadTime}ms`);
-        });
     }
 }
 
 // ================================
-// INITIALIZE APP
+// INITIALIZE APP - Optimized for performance
 // ================================
+const initApp = () => new PortfolioApp();
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        new PortfolioApp();
-    });
+    document.addEventListener('DOMContentLoaded', initApp, { once: true, passive: true });
 } else {
-    new PortfolioApp();
+    initApp();
 }
-
-// Add slide animations for notifications
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
 
 // Export for potential module usage
 export default PortfolioApp;

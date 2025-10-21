@@ -1,8 +1,8 @@
 // Service Worker for Aggressive Caching - Sam Croston Portfolio
-// Version 1.1.0 - Performance Optimized
+// Version 1.2.0 - Performance Optimized
 
-const CACHE_NAME = 'sam-portfolio-v1.1.0';
-const RUNTIME_CACHE = 'sam-portfolio-runtime-v1.1.0';
+const CACHE_NAME = 'sam-portfolio-v1.2.0';
+const RUNTIME_CACHE = 'sam-portfolio-runtime-v1.2.0';
 
 // Assets to cache immediately on install
 const PRECACHE_ASSETS = [
@@ -78,11 +78,8 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Skip external requests (only cache same-origin)
+  // Let browser handle font caching via HTTP headers to avoid CSP violations
   if (url.origin !== location.origin) {
-    // For fonts from Google, use cache-first
-    if (url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com') {
-      event.respondWith(cacheFirstStrategy(request, RUNTIME_CACHE));
-    }
     return;
   }
 

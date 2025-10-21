@@ -1315,6 +1315,18 @@ section {
     transform: translateY(-2px);
 }
 
+/* Instagram link special styling */
+.contact-link-instagram {
+    background: linear-gradient(135deg, rgba(225, 48, 108, 0.1), rgba(253, 29, 29, 0.1), rgba(245, 96, 64, 0.1));
+    border: 1px solid rgba(225, 48, 108, 0.3);
+}
+
+.contact-link-instagram:hover {
+    background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(253, 29, 29, 0.2), rgba(245, 96, 64, 0.2));
+    border-color: rgba(225, 48, 108, 0.5);
+    box-shadow: 0 4px 15px rgba(225, 48, 108, 0.3);
+}
+
 .link-icon {
     width: 24px;
     height: 24px;
@@ -1463,7 +1475,7 @@ section {
     }
     
     .hero-visual {
-        order: -1;
+        display: none; /* Hide stats card on mobile - layout issues */
     }
     
     .hero-title {

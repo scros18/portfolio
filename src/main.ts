@@ -244,17 +244,88 @@ class PortfolioApp {
     }
 
     private async submitForm(data: FormData): Promise<void> {
-        // Simulate form submission
         this.showNotification('Sending message...', 'info');
         
-        // In production, replace with actual API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        console.log('Form submitted:', data);
-        this.showNotification('Message sent successfully!', 'success');
-        
-        if (this.contactForm) {
-            this.contactForm.reset();
+        try {
+            // Send to Discord webhook with beautiful embed
+            const webhookUrl = 'https://discord.com/api/webhooks/1430211373971013692/FnKzvF7sdKbeWgSZd0IfpOp6Jsvx28EJ0U48_TTa1n0F5FlhrPUrQv4_KFEokdZVpgie';
+            
+            const currentTime = new Date().toLocaleString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            
+            const embed = {
+                username: 'Portfolio Contact',
+                embeds: [{
+                    author: {
+                        name: '✨ New Contact Request'
+                    },
+                    title: '📬 Someone wants to work with you!',
+                    description: `**New message received from ${data.name}**\n━━━━━━━━━━━━━━━━━━━━━`,
+                    color: 0x6366f1, // Primary purple from site
+                    fields: [
+                        {
+                            name: '👤 Contact Name',
+                            value: `\`\`\`${data.name}\`\`\``,
+                            inline: true
+                        },
+                        {
+                            name: '📧 Email Address',
+                            value: `\`\`\`${data.email}\`\`\``,
+                            inline: true
+                        },
+                        {
+                            name: '\u200b',
+                            value: '\u200b',
+                            inline: false
+                        },
+                        {
+                            name: '💬 Message Content',
+                            value: `>>> ${data.message}`,
+                            inline: false
+                        },
+                        {
+                            name: '⏰ Submitted At',
+                            value: `\`${currentTime}\``,
+                            inline: true
+                        },
+                        {
+                            name: '🌐 Source',
+                            value: '`samcroston.com`',
+                            inline: true
+                        }
+                    ],
+                    footer: {
+                        text: '🚀 samcroston.com • Professional Portfolio'
+                    },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(embed)
+            });
+
+            if (response.ok) {
+                this.showNotification('Message sent successfully! 🚀 I\'ll get back to you soon.', 'success');
+                if (this.contactForm) {
+                    this.contactForm.reset();
+                }
+            } else {
+                throw new Error('Failed to send message');
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+            this.showNotification('Failed to send message. Please try emailing me directly.', 'error');
         }
     }
 

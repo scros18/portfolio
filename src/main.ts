@@ -248,7 +248,12 @@ class PortfolioApp {
         
         try {
             // Send to Discord webhook with beautiful embed
-            const webhookUrl = 'https://discord.com/api/webhooks/1430211373971013692/FnKzvF7sdKbeWgSZd0IfpOp6Jsvx28EJ0U48_TTa1n0F5FlhrPUrQv4_KFEokdZVpgie';
+            // Webhook URL is injected during build process from .env
+            const webhookUrl = process.env.DISCORD_WEBHOOK_URL || '';
+            
+            if (!webhookUrl) {
+                throw new Error('Webhook URL not configured');
+            }
             
             const currentTime = new Date().toLocaleString('en-GB', {
                 day: '2-digit',

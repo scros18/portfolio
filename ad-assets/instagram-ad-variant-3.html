@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Ad Variant 3 - Testimonial Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .ad-container {
+            width: 1080px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        /* Background gradients */
+        .gradient-sphere {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+        }
+
+        .sphere-1 {
+            width: 800px;
+            height: 800px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.3;
+        }
+
+        .sphere-2 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, #ec4899, #f97316);
+            bottom: -200px;
+            right: -200px;
+            opacity: 0.25;
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 70px 60px;
+        }
+
+        .instagram-tag {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 22px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .top-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .emoji-large {
+            font-size: 100px;
+            margin-bottom: 35px;
+            filter: drop-shadow(0 8px 30px rgba(99, 102, 241, 0.5));
+        }
+
+        .question {
+            font-size: 56px;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+            max-width: 900px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+
+        .answer {
+            font-size: 32px;
+            color: #cbd5e1;
+            font-weight: 600;
+            margin-bottom: 50px;
+            line-height: 1.5;
+            max-width: 850px;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(236, 72, 153, 0.12));
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px;
+            padding: 40px 50px;
+            margin-bottom: 50px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .benefit-icon {
+            font-size: 36px;
+            filter: drop-shadow(0 2px 10px rgba(99, 102, 241, 0.5));
+        }
+
+        .price-tag {
+            background: linear-gradient(135deg, #22c55e, #10b981);
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 800;
+            padding: 18px 40px;
+            border-radius: 50px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 32px rgba(34, 197, 94, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 28px 65px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            background-size: 200% 200%;
+            color: white;
+            font-size: 36px;
+            font-weight: 900;
+            border-radius: 20px;
+            text-decoration: none;
+            box-shadow: 0 12px 48px rgba(99, 102, 241, 0.7);
+            animation: gradientPulse 3s ease infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        @keyframes gradientPulse {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .cta-subtext {
+            font-size: 20px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: auto;
+            font-size: 28px;
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .instructions {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 18px 35px;
+            border-radius: 16px;
+            font-size: 15px;
+            z-index: 1000;
+            border: 2px solid #6366f1;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        📸 VARIANT 3: Question/Answer Format - Screenshot at 1080x1080px! 🔥
+    </div>
+
+    <div class="ad-container">
+        <div class="gradient-sphere sphere-1"></div>
+        <div class="gradient-sphere sphere-2"></div>
+
+        <div class="content">
+            <div class="instagram-tag">@scros18</div>
+
+            <div class="top-section">
+                <div class="emoji-large">💡</div>
+
+                <h1 class="question">
+                    Need a <span class="gradient-text">Website</span><br>
+                    That Actually Works?
+                </h1>
+
+                <p class="answer">
+                    I build high-performance websites that<br>
+                    are <strong>fast, secure & profitable</strong>
+                </p>
+
+                <div class="highlight-box">
+                    <div class="benefit-grid">
+                        <div class="benefit">
+                            <span class="benefit-icon">⚡</span>
+                            100/100 Speed
+                        </div>
+                        <div class="benefit">
+                            <span class="benefit-icon">🔒</span>
+                            A+ Security
+                        </div>
+                        <div class="benefit">
+                            <span class="benefit-icon">📱</span>
+                            Mobile First
+                        </div>
+                        <div class="benefit">
+                            <span class="benefit-icon">🎨</span>
+                            Custom Design
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-tag">
+                    🚀 Fast Turnaround • Affordable Rates
+                </div>
+
+                <a href="#" class="cta-button">
+                    Get Started
+                    <span>→</span>
+                </a>
+
+                <div class="cta-subtext">
+                    📩 DM @scros18 or visit website
+                </div>
+            </div>
+
+            <div class="footer">
+                samcroston.com
+            </div>
+        </div>
+    </div>
+</body>
+</html>

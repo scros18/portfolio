@@ -188,8 +188,38 @@ async function obfuscateJavaScript() {
   const originalSize = Buffer.byteLength(originalCode);
   logFile('Reading', 'main.js', originalSize);
   
+  // Load environment variables
+  log('Injecting environment variables...', 'step');
+  let processedCode = originalCode;
+  
+  // Load .env file if it exists
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    const envVars = {};
+    
+    envContent.split('\n').forEach(line => {
+      const match = line.match(/^([^#=]+)=(.*)$/);
+      if (match) {
+        const key = match[1].trim();
+        const value = match[2].trim();
+        envVars[key] = value;
+      }
+    });
+    
+    // Replace process.env.VARIABLE with actual values
+    Object.keys(envVars).forEach(key => {
+      const regex = new RegExp(`process\\.env\\.${key}`, 'g');
+      processedCode = processedCode.replace(regex, `'${envVars[key]}'`);
+    });
+    
+    log('Environment variables injected', 'success');
+  } else {
+    log('No .env file found - using defaults', 'warning');
+  }
+  
   log('Applying military-grade obfuscation...', 'step');
-  const obfuscationResult = JavaScriptObfuscator.obfuscate(originalCode, config.obfuscatorOptions);
+  const obfuscationResult = JavaScriptObfuscator.obfuscate(processedCode, config.obfuscatorOptions);
   const obfuscatedCode = obfuscationResult.getObfuscatedCode();
   const obfuscatedSize = Buffer.byteLength(obfuscatedCode);
   

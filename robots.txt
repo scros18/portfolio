@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /dist/
+
+# Sitemap
+Sitemap: https://samcroston.com/sitemap.xml
+
+# Sam Croston - Web Developer
+# Portfolio: https://samcroston.com
+# Contact: hello@samcroston.com

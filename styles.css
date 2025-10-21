@@ -30,8 +30,8 @@
     --spacing-lg: 4rem;
     --spacing-xl: 6rem;
     
-    /* Typography */
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* Typography - System fonts first for instant LCP */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 html {

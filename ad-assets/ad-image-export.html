@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Export - Right Click to Save</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            gap: 30px;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(52, 199, 89, 0.05));
+            border: 1px solid rgba(52, 199, 89, 0.3);
+            padding: 20px 30px;
+            border-radius: 16px;
+            color: white;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .instructions h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #34C759;
+        }
+
+        .instructions p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .instructions strong {
+            color: #34C759;
+        }
+
+        #ad-canvas {
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            display: block;
+        }
+
+        #ad-canvas:hover {
+            box-shadow: 0 25px 80px rgba(52, 199, 89, 0.3);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #34C759, #30D158);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(52, 199, 89, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(52, 199, 89, 0.5);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+
+        .status {
+            color: #34C759;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .status.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>📸 Export Your Ad</h2>
+        <p><strong>Right-click</strong> the image below and select <strong>"Save image as..."</strong></p>
+        <p>Or click the download button to save automatically</p>
+    </div>
+
+    <canvas id="ad-canvas" width="2160" height="2160" style="width: 1080px; height: 1080px;"></canvas>
+    
+    <button class="download-btn" onclick="downloadCanvas()">💾 Download Ultra HD PNG</button>
+    
+    <div class="status" id="status"></div>
+
+    <script>
+        const canvas = document.getElementById('ad-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false, desynchronized: false });
+        
+        // Enable image smoothing for maximum quality
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        
+        const iframe = document.createElement('iframe');
+        
+        // Load the ad page at 2x resolution
+        iframe.style.position = 'absolute';
+        iframe.style.left = '-9999px';
+        iframe.style.width = '2160px';
+        iframe.style.height = '2160px';
+        iframe.style.transform = 'scale(2)';
+        iframe.style.transformOrigin = '0 0';
+        iframe.src = 'instagram-premium-final-v2-backup.html';
+        document.body.appendChild(iframe);
+
+        iframe.onload = async function() {
+            showStatus('⏳ Rendering ultra HD image...');
+            
+            try {
+                // Wait for fonts and images to load
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                const adContainer = iframe.contentDocument.querySelector('.ad-container');
+                
+                if (!adContainer) {
+                    throw new Error('Ad container not found');
+                }
+
+                // Use html2canvas from CDN
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                iframe.contentDocument.head.appendChild(script);
+                
+                script.onload = async function() {
+                    try {
+                        showStatus('⏳ Processing... (this may take 10-15 seconds)');
+                        
+                        const tempCanvas = await iframe.contentWindow.html2canvas(adContainer, {
+                            scale: 4, // 4x scale for ultra HD (4320x4320 intermediate)
+                            backgroundColor: '#fafafa',
+                            logging: false,
+                            width: 1080,
+                            height: 1080,
+                            foreignObjectRendering: false,
+                            removeContainer: false,
+                            imageTimeout: 15000,
+                            useCORS: true,
+                            allowTaint: false
+                        });
+                        
+                        // Draw to main canvas at 2x (2160x2160 final)
+                        ctx.drawImage(tempCanvas, 0, 0, 2160, 2160);
+                        
+                        showStatus('✓ Ultra HD image ready! Right-click to save or click download.');
+                        
+                    } catch (error) {
+                        console.error('Rendering error:', error);
+                        drawFallback();
+                    }
+                };
+                
+            } catch (error) {
+                console.error('Loading error:', error);
+                drawFallback();
+            }
+        };
+
+        function drawFallback() {
+            // Draw a simple fallback if rendering fails
+            ctx.fillStyle = '#fafafa';
+            ctx.fillRect(0, 0, 2160, 2160);
+            
+            ctx.fillStyle = '#1d1d1f';
+            ctx.font = 'bold 96px -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Use Screenshot Method', 1080, 1000);
+            
+            ctx.font = '48px -apple-system';
+            ctx.fillText('Press Win + Shift + S', 1080, 1120);
+            
+            showStatus('⚠️ Please use screenshot method instead');
+        }
+
+        function downloadCanvas() {
+            showStatus('⏳ Preparing download...');
+            
+            // Convert to blob with maximum quality
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().slice(0, 10);
+                link.download = `sam-croston-ad-ultra-hd-${timestamp}.png`;
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+                
+                // Show file size
+                const sizeMB = (blob.size / 1024 / 1024).toFixed(2);
+                showStatus(`✓ Downloaded! (${sizeMB} MB - Ultra HD Quality)`);
+            }, 'image/png', 1.0); // Maximum quality
+        }
+
+        function showStatus(message) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.classList.add('show');
+            setTimeout(() => status.classList.remove('show'), 3000);
+        }
+
+        // Also allow right-click save on canvas
+        canvas.addEventListener('contextmenu', function(e) {
+            showStatus('✓ Right-click to save image');
+        });
+    </script>
+</body>
+</html>
